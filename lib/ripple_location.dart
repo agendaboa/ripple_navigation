@@ -7,15 +7,15 @@ class RippleLocation extends StatefulWidget {
   final GlobalKey<RippleLocationState> rippleController;
   final Duration duration;
 
-  final double rippleSize;
+  final double? rippleSize;
 
   const RippleLocation({
-    Key key,
-    this.child,
-    this.rippleController,
+    Key? key,
+    required this.child,
+    required this.rippleController,
     this.duration = const Duration(milliseconds: 600),
     this.rippleSize,
-  }) : super(key: rippleController ?? key);
+  }) : super(key: rippleController);
 
   @override
   RippleLocationState createState() => RippleLocationState();
@@ -38,7 +38,7 @@ class RippleLocationState extends State<RippleLocation> {
   }
 
   pushRippleTransitionWithRouteName(BuildContext context,
-      {String route, dynamic arguments}) {
+      {required String route, dynamic arguments}) {
     forwardRipple();
     Navigator.pushNamed(
       context,
@@ -49,33 +49,37 @@ class RippleLocationState extends State<RippleLocation> {
 
   /// this method for only animating Ripple effect from the [RippleLocation] widget
   forwardRipple() async {
-    rippleController.currentState.animate();
+    rippleController.currentState?.animate();
     // await Future.delayed(duration);
   }
 
   reverseRipple() {
-    rippleController.currentState.reverseAnimate();
+    rippleController.currentState?.reverseAnimate();
   }
 
   handleRippleAnimation() async {
-    RenderBox findRenderObject =
-        _rippleLocationKey.currentContext.findRenderObject();
-    var widgetSize = findRenderObject.size;
-    Offset localToGlobal = findRenderObject.localToGlobal(Offset(
-      widgetSize.width / 2,
-      widgetSize.height / 2,
-    ));
-    final fullscreenSize = 2 * MediaQuery.of(context).size.longestSide;
-    Overlay.of(context).insert(
-      OverlayEntry(builder: (BuildContext context) {
-        return RippleCircle(
-          currentPosition: localToGlobal,
-          rippleController: rippleController,
-          duration: widget.duration,
-          fullScreenSize: widget.rippleSize ?? fullscreenSize,
+    RenderBox? findRenderObject =
+        _rippleLocationKey.currentContext?.findRenderObject() as RenderBox?;
+    var widgetSize = findRenderObject?.size;
+    if (widgetSize != null) {
+      Offset? localToGlobal = findRenderObject?.localToGlobal(Offset(
+        widgetSize.width / 2,
+        widgetSize.height / 2,
+      ));
+      if (localToGlobal != null) {
+        final fullscreenSize = 2 * MediaQuery.of(context).size.longestSide;
+        Overlay.of(context).insert(
+          OverlayEntry(builder: (BuildContext context) {
+            return RippleCircle(
+              currentPosition: localToGlobal,
+              rippleController: rippleController,
+              duration: widget.duration,
+              fullScreenSize: widget.rippleSize ?? fullscreenSize,
+            );
+          }),
         );
-      }),
-    );
+      }
+    }
   }
 
   @override
