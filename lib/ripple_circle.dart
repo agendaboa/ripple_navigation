@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 
 class RippleCircle extends StatefulWidget {
   final Duration duration;
+  final Duration? reverseDuration;
   final Offset currentPosition;
   final Curve curve;
   final GlobalKey<RippleCircleState> rippleController;
 
   final double fullScreenSize;
+  final Color? rippleColor;
 
   const RippleCircle({
     Key? key,
     required this.duration,
+    this.reverseDuration,
     required this.currentPosition,
     required this.rippleController,
     required this.fullScreenSize,
     this.curve = Curves.linearToEaseOut,
+    this.rippleColor,
   }) : super(key: rippleController);
 
   @override
@@ -52,10 +56,12 @@ class RippleCircleState extends State<RippleCircle>
     sizeAnimationController = AnimationController(
       vsync: this,
       duration: widget.duration,
+      reverseDuration: widget.reverseDuration,
     );
     opacityAnimationController = AnimationController(
       vsync: this,
       duration: widget.duration,
+      reverseDuration: widget.reverseDuration,
     );
     sizeAnimation = Tween<double>(
       begin: 0,
@@ -93,7 +99,8 @@ class RippleCircleState extends State<RippleCircle>
           width: sizeAnimation.value,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).colorScheme.secondary,
+            color:
+                widget.rippleColor ?? Theme.of(context).colorScheme.secondary,
           ),
         ),
       ),

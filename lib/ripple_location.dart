@@ -6,15 +6,19 @@ class RippleLocation extends StatefulWidget {
   final Widget child;
   final GlobalKey<RippleLocationState> rippleController;
   final Duration duration;
+  final Duration? reverseDuration;
 
   final double? rippleSize;
+  final Color? rippleColor;
 
   const RippleLocation({
     Key? key,
     required this.child,
     required this.rippleController,
     this.duration = const Duration(milliseconds: 600),
+    this.reverseDuration,
     this.rippleSize,
+    this.rippleColor,
   }) : super(key: rippleController);
 
   @override
@@ -74,7 +78,9 @@ class RippleLocationState extends State<RippleLocation> {
               currentPosition: localToGlobal,
               rippleController: rippleController,
               duration: widget.duration,
+              reverseDuration: widget.reverseDuration,
               fullScreenSize: widget.rippleSize ?? fullscreenSize,
+              rippleColor: widget.rippleColor,
             );
           }),
         );
