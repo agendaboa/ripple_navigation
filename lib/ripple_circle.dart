@@ -39,7 +39,7 @@ class RippleCircleState extends State<RippleCircle>
     opacityAnimationController.forward();
     await Future.delayed(widget.duration);
     opacityAnimationController.reverse();
-    sizeAnimationController.reverse();
+    sizeAnimationController.reset();
     // reverseAnimate();
   }
 
