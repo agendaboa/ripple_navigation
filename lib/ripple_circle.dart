@@ -38,16 +38,17 @@ class RippleCircleState extends State<RippleCircle>
     sizeAnimationController.forward();
     opacityAnimationController.forward();
     await Future.delayed(widget.duration);
-    opacityAnimationController.reverse();
+    opacityAnimationController.reset();
     sizeAnimationController.reset();
-    // reverseAnimate();
   }
 
-  reverseAnimate() {
+  reverseAnimate() async {
     sizeAnimationController.forward(from: 1);
     opacityAnimationController.forward(from: 1);
     sizeAnimationController.reverse();
-    // opacityAnimationController.reverse();
+    opacityAnimationController.reverse();
+    await Future.delayed(widget.reverseDuration ?? widget.duration);
+    opacityAnimationController.reset();
   }
 
   @override
@@ -72,7 +73,7 @@ class RippleCircleState extends State<RippleCircle>
         curve: widget.curve,
       ),
     );
-    opacityAnimation = Tween<double>(begin: .5, end: 1).animate(
+    opacityAnimation = Tween<double>(begin: 1, end: 0).animate(
       CurvedAnimation(
         parent: opacityAnimationController,
         curve: widget.curve,
