@@ -10,6 +10,7 @@ class RippleLocation extends StatefulWidget {
 
   final double? rippleSize;
   final Color? rippleColor;
+  final GlobalKey? ancestorKey;
 
   const RippleLocation({
     Key? key,
@@ -19,6 +20,7 @@ class RippleLocation extends StatefulWidget {
     this.reverseDuration,
     this.rippleSize,
     this.rippleColor,
+    this.ancestorKey,
   }) : super(key: rippleController);
 
   @override
@@ -66,10 +68,13 @@ class RippleLocationState extends State<RippleLocation> {
         _rippleLocationKey.currentContext?.findRenderObject() as RenderBox?;
     var widgetSize = findRenderObject?.size;
     if (widgetSize != null) {
-      Offset? localToGlobal = findRenderObject?.localToGlobal(Offset(
-        widgetSize.width / 2,
-        widgetSize.height / 2,
-      ));
+      Offset? localToGlobal = findRenderObject?.localToGlobal(
+        Offset(
+          widgetSize.width / 2,
+          widgetSize.height / 2,
+        ),
+        ancestor: widget.ancestorKey?.currentContext?.findRenderObject(),
+      );
       if (localToGlobal != null) {
         final fullscreenSize = 2 * MediaQuery.of(context).size.longestSide;
         Overlay.of(context).insert(
